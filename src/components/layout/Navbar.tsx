@@ -1,42 +1,59 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuthStore } from '@/stores/authStore';
+import { useAuth } from '@/hooks/useAuth';
 import { 
   BookOpen, 
-  Calendar, 
   BarChart3, 
   Settings, 
   LogOut, 
   Home,
-  Users,
   ClipboardList,
   GraduationCap
 } from 'lucide-react';
 import logoImage from '@/assets/logo.jpg';
 
 export const Navbar: React.FC = () => {
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
+  const { signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const teacherNavItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: Home },
-    { href: '/classes', label: 'Classes', icon: BookOpen },
-    { href: '/attendance', label: 'Attendance', icon: ClipboardList },
-    { href: '/grades', label: 'Grades', icon: GraduationCap },
-    { href: '/analytics', label: 'Analytics', icon: BarChart3 },
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/login');
+  };
+
+  const navItems = [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: Home,
+    },
+    {
+      name: 'Classes',
+      href: '/classes',
+      icon: BookOpen,
+    },
+    {
+      name: 'Grades',
+      href: '/grades',
+      icon: GraduationCap,
+    },
+    {
+      name: 'Attendance',
+      href: '/attendance',
+      icon: ClipboardList,
+    },
+    {
+      name: 'Analytics',
+      href: '/analytics',
+      icon: BarChart3,
+    },
   ];
-
-  const studentNavItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: Home },
-    { href: '/my-classes', label: 'My Classes', icon: BookOpen },
-    { href: '/my-grades', label: 'My Grades', icon: GraduationCap },
-    { href: '/analytics', label: 'My Analytics', icon: BarChart3 },
-  ];
-
-  const navItems = user?.role === 'teacher' ? teacherNavItems : studentNavItems;
 
   const isActive = (href: string) => location.pathname === href;
 
@@ -73,7 +90,7 @@ export const Navbar: React.FC = () => {
                     className="gap-2"
                   >
                     <Icon className="h-4 w-4" />
-                    {item.label}
+                    {item.name}
                   </Button>
                 </Link>
               );
@@ -117,7 +134,7 @@ export const Navbar: React.FC = () => {
                       <DropdownMenuItem key={item.href} asChild>
                         <Link to={item.href} className="flex items-center gap-2">
                           <Icon className="h-4 w-4" />
-                          {item.label}
+                          {item.name}
                         </Link>
                       </DropdownMenuItem>
                     );
@@ -126,7 +143,7 @@ export const Navbar: React.FC = () => {
                 </div>
                 
                 <DropdownMenuItem
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="flex items-center gap-2 text-destructive focus:text-destructive"
                 >
                   <LogOut className="h-4 w-4" />

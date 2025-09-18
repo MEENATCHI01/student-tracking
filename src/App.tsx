@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Classes from "./pages/Classes";
 import Analytics from "./pages/Analytics";
+import Grades from "./pages/Grades";
+import Attendance from "./pages/Attendance";
 import NotFound from "./pages/NotFound";
 import { useAuthStore } from "./stores/authStore";
 
@@ -41,6 +43,16 @@ const App = () => (
           <Route path="/analytics" element={
             <ProtectedRoute>
               <Analytics />
+            </ProtectedRoute>
+          } />
+          <Route path="/grades" element={
+            <ProtectedRoute>
+              <Grades />
+            </ProtectedRoute>
+          } />
+          <Route path="/attendance" element={
+            <ProtectedRoute>
+              <Attendance />
             </ProtectedRoute>
           } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

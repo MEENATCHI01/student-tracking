@@ -9,6 +9,11 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  preview: {
+    // ✅ Allow Render domain in production
+    allowedHosts: ["student-tracking-s8th.onrender.com"],
+    port: 10000, // Render requires this for Vite preview
+  },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
